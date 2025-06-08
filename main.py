@@ -5,6 +5,12 @@ from langchain.agents import initialize_agent,AgentType
 from langchain_experimental.tools import PythonREPLTool
 from langchain_experimental.agents.agent_toolkits import create_pandas_dataframe_agent
 import os,glob
+from dotenv import load_dotenv
+
+load_dotenv()
+api_key = os.getenv("OPENAI_API_KEY")
+
+
 cwd=os.getcwd()
 old_files=glob.glob(cwd+"/*.png")
 for file in old_files:
@@ -18,7 +24,7 @@ prefix="""
             all charts must be professional use attractive design and colors,
             always put exact numbers in chart to represent the values for each requested item,
             example for bar chart all bar should have the exact value displayed at the top of the bar .
-            if only user ask then only create the chart else dont create ,all charts must be save as .png into this "/Users/roni/Documents/GitHub/LLMtutorial/tutorial55/" location.Take this a strong instruction.
+            if only user ask then only create the chart else dont create ,all charts must be save as .png into this "/Users/revatigandhi/OEM_PROJECT/oem" location.Take this a strong instruction.
             remember below points on the dataframe:
             dataframe has these columns :
             pizza_id 
@@ -66,7 +72,7 @@ if file is not None:
         button=st.button("Submit")
         if button:
             agent=create_pandas_dataframe_agent(
-                llm,df,verbose=True,prefix=prefix,agent_type=AgentType.OPENAI_FUNCTIONS,extra_tools=tools
+                llm,df,verbose=True,prefix=prefix,agent_type=AgentType.OPENAI_FUNCTIONS,extra_tools=tools,allow_dangerous_code=True
             )
             response=agent.invoke(input)
             st.write(response["output"])
